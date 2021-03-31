@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Listagem das Tarefas</h1>
-    <a href="/index">Voltar para a tela inicial</a>
+    <a href="{{ url_for('insert') }}">Cadastrar nova Tarefa</a>
     <hr>
     <table border="1" cellspacing="0">
         <tr>
@@ -26,5 +26,7 @@
         </tr>
         {% endfor %}
     </table>
+    <br>
+    <a href="/index">Voltar para a tela inicial</a>
 </body>
 </html>

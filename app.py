@@ -4,8 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+db.create_all()
 
 
 class Task(db.Model):
@@ -20,9 +22,6 @@ class Task(db.Model):
         self.status = status
 
 
-db.create_all()
-
-
 @app.route('/')
 @app.route('/index', methods=['GET'])
 def index():
@@ -31,7 +30,6 @@ def index():
 
 @app.route('/insert', methods=['GET', 'POST'])
 def insert():
-
     if request.method == 'POST':
         description = request.form.get('description')
         status = request.form.get('status')
@@ -60,7 +58,6 @@ def delete_by_id(task_id):
     task = Task.query.filter_by(_id=task_id).first()
     db.session.delete(task)
     db.session.commit()
-
     return redirect(url_for('find_all'))
 
 
