@@ -5,23 +5,23 @@
     <title>Criar nova Tarefa</title>
 </head>
 <body>
-    <h1>Cadastro de nova Tarefa</h1>
-    <hr>
-    <form action="{{ url_for('insert') }}" method="POST">
-        <table>
-            <tr>
-                <td>Descrição: </td>
-                <td><input type="text" name="description"></td>
-            </tr>
-            <tr>
-                <td>Tarefa finalizada?</td>
-                <td><input type="checkbox" name="status"></td>
-            </tr>
-        </table>
-        <br>
-        <input type="submit" value="Salvar">
-    </form>
-    <hr>
-    <a href="{{ url_for('index') }}">Voltar para a tela inicial</a>
+<h1>Cadastro de nova Tarefa</h1>
+<hr>
+<form action="{{ url_for('insert') }}" method="POST">
+    <table>
+        <tr>
+            <td>Descrição:</td>
+            <td><input type="text" name="description"></td>
+        </tr>
+        <tr>
+            <td>Tarefa finalizada?</td>
+            <td><input type="checkbox" name="status"></td>
+        </tr>
+    </table>
+    <br>
+    <input type="submit" value="Salvar">
+</form>
+<hr>
+<a href="{{ url_for('index') }}">Voltar para a tela inicial</a>
 </body>
 </html>

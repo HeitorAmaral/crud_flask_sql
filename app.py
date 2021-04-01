@@ -7,7 +7,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-db.create_all()
 
 
 class Task(db.Model):
@@ -22,6 +21,9 @@ class Task(db.Model):
         self.status = status
 
 
+db.create_all()
+
+
 @app.route('/')
 @app.route('/index', methods=['GET'])
 def index():
@@ -33,14 +35,18 @@ def insert():
     if request.method == 'POST':
         description = request.form.get('description')
         status = request.form.get('status')
-        if status is None:
+        if status is None or status == 'False':
             status = False
-        else:
+        elif status == 'on' or status == 'True':
             status = True
 
         if description:
-            task = Task(description, status)
-            db.session.add(task)
+            task_exists = find_by_description(description)
+            if task_exists:
+                task_exists.status = status
+            else:
+                task = Task(description, status)
+                db.session.add(task)
             db.session.commit()
         return redirect(url_for('find_all'))
     else:
@@ -55,15 +61,15 @@ def find_all():
 
 @app.route('/delete-by-id/<int:task_id>', methods=['GET', 'DELETE'])
 def delete_by_id(task_id):
-    task = Task.query.filter_by(_id=task_id).first()
+    task = find_by_id(task_id)
     db.session.delete(task)
     db.session.commit()
     return redirect(url_for('find_all'))
 
 
-@app.route('/change-status-by-id/<int:task_id>', methods=['GET'])
+@app.route('/change-status-by-id/<int:task_id>', methods=['GET', 'PUT'])
 def change_status_by_id(task_id):
-    task = Task.query.filter_by(_id=task_id).first()
+    task = find_by_id(task_id)
     if task.status:
         task.status = False
     else:
@@ -73,17 +79,31 @@ def change_status_by_id(task_id):
     return redirect(url_for('find_all'))
 
 
-@app.route('/update-by-id/<int:task_id>', methods=['GET', 'POST'])
+@app.route('/update-by-id/<int:task_id>', methods=['GET', 'POST', 'PUT'])
 def update_by_id(task_id):
-    task = Task.query.filter_by(_id=task_id).first()
+    task = find_by_id(task_id)
     description = request.form.get('description')
 
-    if request.method == 'POST':
+    if request.method == 'POST' or request.method == 'PUT':
         if description:
-            task.description = description
-            db.session.commit()
-            return redirect(url_for('find_all'))
+            task_exists = find_by_description(description)
+            if task_exists:
+                return render_template('update.html', task=task, message='Já existe um registro com essa descrição '
+                                                                         'criado. Escolha outra descricão.')
+            else:
+                task.description = description
+                db.session.commit()
+        return redirect(url_for('find_all'))
     return render_template('update.html', task=task)
+
+
+def find_by_id(task_id):
+    db.session.remove()
+    return Task.query.filter_by(_id=task_id).first()
+
+
+def find_by_description(description):
+    return Task.query.filter_by(description=description).first()
 
 
 if __name__ == '__main__':
