@@ -5,52 +5,65 @@ from app import app, find_by_description, find_by_id
 
 class TestIndex(unittest.TestCase):
     def setUp(self):
+        print("In method", self._testMethodName)
         self.app_test = app.test_client()
         self.response = self.app_test.get('/')
 
     def test_get_index_returns_200(self):
+        print("In method", self._testMethodName)
         self.assertEqual(200, self.response.status_code)
 
     def test_get_index_renders_html(self):
+        print("In method", self._testMethodName)
         self.assertIn('text/html', self.response.content_type)
 
     def test_get_index_renders_title_html(self):
+        print("In method", self._testMethodName)
         response_decoded = self.response.data.decode('utf-8')
         self.assertIn('<title>Página Inícial</title>', response_decoded)
 
 
 class TestFindAll(unittest.TestCase):
     def setUp(self):
+        print("In method", self._testMethodName)
         self.app_test = app.test_client()
         self.response = self.app_test.get('/find-all')
 
     def test_get_find_all_returns_200(self):
+        print("In method", self._testMethodName)
         self.assertEqual(200, self.response.status_code)
 
     def test_get_find_all_renders_html(self):
+        print("In method", self._testMethodName)
         self.assertIn('text/html', self.response.content_type)
 
     def test_get_find_all_renders_title_html(self):
+        print("In method", self._testMethodName)
         response_decoded = self.response.data.decode('utf-8')
         self.assertIn('<title>Lista de Tarefas</title>', response_decoded)
 
 
 class TestInsert(unittest.TestCase):
     def setUp(self):
+        print("In method", self._testMethodName)
         self.app_test = app.test_client()
         self.response = self.app_test.get('/insert')
 
     def test_get_insert_returns_200(self):
+        print("In method", self._testMethodName)
         self.assertEqual(200, self.response.status_code)
 
     def test_get_insert_renders_html(self):
+        print("In method", self._testMethodName)
         self.assertIn('text/html', self.response.content_type)
 
     def test_get_insert_renders_title_html(self):
+        print("In method", self._testMethodName)
         response_decoded = self.response.data.decode('utf-8')
         self.assertIn('<title>Criar nova Tarefa</title>', response_decoded)
 
     def test_create_register_in_database(self):
+        print("In method", self._testMethodName)
         description = 'TesteInsert'
         status = False
         self.app_test.post('/insert', data=dict(description=description, status=status))
@@ -62,9 +75,11 @@ class TestInsert(unittest.TestCase):
 
 class TestUpdate(unittest.TestCase):
     def setUp(self):
+        print("In method", self._testMethodName)
         self.app_test = app.test_client()
 
     def test_update_register_in_database(self):
+        print("In method", self._testMethodName)
         description = 'TesteUpdate'
         status = False
         self.app_test.post('/insert', data=dict(description=description, status=status))
@@ -78,6 +93,7 @@ class TestUpdate(unittest.TestCase):
         self.app_test.delete('/delete-by-id/' + str(task._id))
 
     def test_update_status_of_register_in_database(self):
+        print("In method", self._testMethodName)
         description = 'TesteUpdateStatus'
         status = False
         self.app_test.post('/insert', data=dict(description=description, status=status))
@@ -91,9 +107,11 @@ class TestUpdate(unittest.TestCase):
 
 class TestDelete(unittest.TestCase):
     def setUp(self):
+        print("In method", self._testMethodName)
         self.app_test = app.test_client()
 
     def test_delete_register_in_database(self):
+        print("In method", self._testMethodName)
         description = 'TesteDelete'
         status = False
         self.app_test.post('/insert', data=dict(description=description, status=status))
