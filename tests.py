@@ -13,6 +13,10 @@ class TestIndex(unittest.TestCase):
     def test_get_index_renders_html(self):
         self.assertIn('text/html', self.response.content_type)
 
+    def test_get_index_renders_title_html(self):
+        response_decoded = self.response.data.decode('utf-8')
+        self.assertIn('<title>Página Inícial</title>', response_decoded)
+
 
 class TestInsert(unittest.TestCase):
     def setUp(self):
@@ -25,6 +29,10 @@ class TestInsert(unittest.TestCase):
     def test_get_insert_renders_html(self):
         self.assertIn('text/html', self.response.content_type)
 
+    def test_get_index_renders_title_html(self):
+        response_decoded = self.response.data.decode('utf-8')
+        self.assertIn('<title>Criar nova Tarefa</title>', response_decoded)
+
 
 class TestFindAll(unittest.TestCase):
     def setUp(self):
@@ -36,6 +44,10 @@ class TestFindAll(unittest.TestCase):
 
     def test_get_find_all_renders_html(self):
         self.assertIn('text/html', self.response.content_type)
+
+    def test_get_index_renders_title_html(self):
+        response_decoded = self.response.data.decode('utf-8')
+        self.assertIn('<title>Lista de Tarefas</title>', response_decoded)
 
 
 if __name__ == '__main__':
