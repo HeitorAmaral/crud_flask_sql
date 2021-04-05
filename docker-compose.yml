@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - unittests
+    command: flask run
+  unittests:
+    build: .
+    command: python tests.py

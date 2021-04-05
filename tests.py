@@ -1,12 +1,22 @@
+import os
 import unittest
 
-from app import app, find_by_description, find_by_id
+from app import app, db, find_by_description, find_by_id
+
+
+TEST_DB = 'test.db'
+app.config['TESTING'] = True
+app.config['WTF_CSRF_ENABLED'] = False
+app.config['DEBUG'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + TEST_DB
 
 
 class TestIndex(unittest.TestCase):
     def setUp(self):
-        print("In method", self._testMethodName)
         self.app_test = app.test_client()
+        db.drop_all()
+        db.create_all()
+
         self.response = self.app_test.get('/')
 
     def test_get_index_returns_200(self):
@@ -27,6 +37,8 @@ class TestFindAll(unittest.TestCase):
     def setUp(self):
         print("In method", self._testMethodName)
         self.app_test = app.test_client()
+        db.drop_all()
+        db.create_all()
         self.response = self.app_test.get('/find-all')
 
     def test_get_find_all_returns_200(self):
@@ -47,6 +59,8 @@ class TestInsert(unittest.TestCase):
     def setUp(self):
         print("In method", self._testMethodName)
         self.app_test = app.test_client()
+        db.drop_all()
+        db.create_all()
         self.response = self.app_test.get('/insert')
 
     def test_get_insert_returns_200(self):
@@ -77,6 +91,8 @@ class TestUpdate(unittest.TestCase):
     def setUp(self):
         print("In method", self._testMethodName)
         self.app_test = app.test_client()
+        db.drop_all()
+        db.create_all()
 
     def test_update_register_in_database(self):
         print("In method", self._testMethodName)
@@ -109,6 +125,8 @@ class TestDelete(unittest.TestCase):
     def setUp(self):
         print("In method", self._testMethodName)
         self.app_test = app.test_client()
+        db.drop_all()
+        db.create_all()
 
     def test_delete_register_in_database(self):
         print("In method", self._testMethodName)
