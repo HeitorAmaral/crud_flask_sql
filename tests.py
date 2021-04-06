@@ -1,4 +1,3 @@
-import os
 import unittest
 
 from app import app, db, find_by_description, find_by_id
