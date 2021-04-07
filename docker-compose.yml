@@ -7,6 +7,7 @@ services:
     depends_on:
       - unittests
     command: flask run
+
   unittests:
     build: .
     command: python tests.py

@@ -3,20 +3,20 @@ import unittest
 from app import app, db, find_by_description, find_by_id
 
 
-TEST_DB = 'test.db'
 app.config['TESTING'] = True
-app.config['WTF_CSRF_ENABLED'] = False
 app.config['DEBUG'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + TEST_DB
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 
 
 class TestIndex(unittest.TestCase):
     def setUp(self):
         self.app_test = app.test_client()
-        db.drop_all()
         db.create_all()
-
         self.response = self.app_test.get('/')
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
 
     def test_get_index_returns_200(self):
         print("In method", self._testMethodName)
@@ -34,11 +34,13 @@ class TestIndex(unittest.TestCase):
 
 class TestFindAll(unittest.TestCase):
     def setUp(self):
-        print("In method", self._testMethodName)
         self.app_test = app.test_client()
-        db.drop_all()
         db.create_all()
         self.response = self.app_test.get('/find-all')
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
 
     def test_get_find_all_returns_200(self):
         print("In method", self._testMethodName)
@@ -56,11 +58,13 @@ class TestFindAll(unittest.TestCase):
 
 class TestInsert(unittest.TestCase):
     def setUp(self):
-        print("In method", self._testMethodName)
         self.app_test = app.test_client()
-        db.drop_all()
         db.create_all()
         self.response = self.app_test.get('/insert')
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
 
     def test_get_insert_returns_200(self):
         print("In method", self._testMethodName)
@@ -88,10 +92,12 @@ class TestInsert(unittest.TestCase):
 
 class TestUpdate(unittest.TestCase):
     def setUp(self):
-        print("In method", self._testMethodName)
         self.app_test = app.test_client()
-        db.drop_all()
         db.create_all()
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
 
     def test_update_register_in_database(self):
         print("In method", self._testMethodName)
@@ -122,10 +128,12 @@ class TestUpdate(unittest.TestCase):
 
 class TestDelete(unittest.TestCase):
     def setUp(self):
-        print("In method", self._testMethodName)
         self.app_test = app.test_client()
-        db.drop_all()
         db.create_all()
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
 
     def test_delete_register_in_database(self):
         print("In method", self._testMethodName)
