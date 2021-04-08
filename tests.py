@@ -1,11 +1,5 @@
 import unittest
-
 from app import app, db, find_by_description, find_by_id
-
-
-app.config['TESTING'] = True
-app.config['DEBUG'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 
 
 class TestIndex(unittest.TestCase):

@@ -1,13 +1,39 @@
 version: "3.9"
 services:
-  flask-app:
+  base:
     build: .
-    ports:
-      - "5000:5000"
-    depends_on:
-      - unittests
-    command: flask run
+    env_file:
+      - .env.prod
 
-  unittests:
+  migrations:
+    extends:
+      service: base
+    command: python manage.py db upgrade
+    depends_on:
+      - db
+
+  flask-app:
+    extends:
+      service: base
+    ports:
+      - 5000:5000
+    depends_on:
+      - unittest
+      - migrations
+    command: python manage.py runserver --host 0.0.0.0
+
+  db:
+    image: postgres:latest
+    ports:
+      - 5433:5433
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: todo
+    restart: always
+
+  unittest:
     build: .
-    command: python tests.py
+    env_file:
+      - .env.dev
+    command: python -m unittest tests.py

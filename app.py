@@ -1,10 +1,9 @@
+import os
 from flask import Flask, render_template, request, url_for, redirect
-
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_object(os.environ["APP_SETTINGS"])
 
 db = SQLAlchemy(app)
 
@@ -19,9 +18,6 @@ class Task(db.Model):
     def __init__(self, description, status):
         self.description = description
         self.status = status
-
-
-db.create_all()
 
 
 @app.route('/')
@@ -107,4 +103,4 @@ def find_by_description(description):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
