@@ -13,7 +13,7 @@ Após isso, o projeto estará pronto para ser executado.
 
 Para executar os testes unitários, deve ser utilizado o arquivo **tests.py**:
 ```sh
-python tests.py
+python -m unittest tests.py
 ```
 
 ### Aplicação
