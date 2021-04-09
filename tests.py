@@ -77,7 +77,8 @@ class TestInsert(unittest.TestCase):
         print("In method", self._testMethodName)
         description = 'TesteInsert'
         status = False
-        self.app_test.post('/insert', data=dict(description=description, status=status))
+        self.app_test.post('/insert', data=dict(description=description,
+                                                status=status))
         task = find_by_description(description)
 
         self.assertEqual(description, task.description)
@@ -97,11 +98,13 @@ class TestUpdate(unittest.TestCase):
         print("In method", self._testMethodName)
         description = 'TesteUpdate'
         status = False
-        self.app_test.post('/insert', data=dict(description=description, status=status))
+        self.app_test.post('/insert', data=dict(description=description,
+                                                status=status))
         task = find_by_description(description)
 
         description = 'TesteUpdateUpdated'
-        self.app_test.put('/update-by-id/' + str(task._id), data=dict(description=description))
+        self.app_test.put('/update-by-id/' + str(task._id),
+                          data=dict(description=description))
         task = find_by_description(description)
 
         self.assertEqual(description, task.description)
@@ -111,7 +114,8 @@ class TestUpdate(unittest.TestCase):
         print("In method", self._testMethodName)
         description = 'TesteUpdateStatus'
         status = False
-        self.app_test.post('/insert', data=dict(description=description, status=status))
+        self.app_test.post('/insert', data=dict(description=description,
+                                                status=status))
         task = find_by_description(description)
         self.app_test.put('/change-status-by-id/' + str(task._id))
         task = find_by_id(task._id)
@@ -133,7 +137,8 @@ class TestDelete(unittest.TestCase):
         print("In method", self._testMethodName)
         description = 'TesteDelete'
         status = False
-        self.app_test.post('/insert', data=dict(description=description, status=status))
+        self.app_test.post('/insert', data=dict(description=description,
+                                                status=status))
         task = find_by_description(description)
 
         self.app_test.delete('/delete-by-id/' + str(task._id))

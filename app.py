@@ -31,6 +31,7 @@ def insert():
     if request.method == 'POST':
         description = request.form.get('description')
         status = request.form.get('status')
+
         if status is None or status == 'False':
             status = False
         elif status == 'on' or status == 'True':
@@ -84,8 +85,10 @@ def update_by_id(task_id):
         if description:
             task_exists = find_by_description(description)
             if task_exists:
-                return render_template('update.html', task=task, message='Já existe um registro com essa descrição '
-                                                                         'criado. Escolha outra descricão.')
+                return render_template('update.html', task=task,
+                                       message='Já existe um registro com'
+                                               ' essa descrição criado.'
+                                               ' Escolha outra descricão.')
             else:
                 task.description = description
                 db.session.commit()
