@@ -14,26 +14,26 @@ services:
       service: base
     links:
       - db
-    command: python manage.py db upgrade
     depends_on:
       - db
+    command: python manage.py db upgrade
 
   app:
     container_name:
       app
     init: true
-    links:
-      - db
     extends:
       service: base
-    ports:
-      - 5000:5000
+    links:
+      - db
     depends_on:
       - unittest
       - migrations
-    command: python manage.py runserver --host 0.0.0.0
+    ports:
+      - 5000:5000
     volumes:
       - app-data:/app
+    command: python manage.py runserver --host 0.0.0.0
 
   db:
     container_name:
