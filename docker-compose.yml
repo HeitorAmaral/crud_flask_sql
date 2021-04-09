@@ -1,11 +1,15 @@
 version: "3.9"
 services:
   base:
+    container_name:
+      base
     build: .
     env_file:
       - .env.prod
 
   migrations:
+    container_name:
+      migrations
     extends:
       service: base
     links:
@@ -14,7 +18,9 @@ services:
     depends_on:
       - db
 
-  flask-app:
+  app:
+    container_name:
+      app
     init: true
     links:
       - db
@@ -26,8 +32,12 @@ services:
       - unittest
       - migrations
     command: python manage.py runserver --host 0.0.0.0
+    volumes:
+      - app-data:/app
 
   db:
+    container_name:
+      db
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
@@ -38,6 +48,8 @@ services:
       - db-data:/var/lib/postgresql/data
 
   unittest:
+    container_name:
+      unittest
     build: .
     env_file:
       - .env.dev
@@ -45,3 +57,4 @@ services:
 
 volumes:
   db-data:
+  app-data:
