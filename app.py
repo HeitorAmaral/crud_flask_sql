@@ -9,6 +9,10 @@ db = SQLAlchemy(app)
 
 
 class Task(db.Model):
+    """
+    Class to define the Model of the application, and the table in
+     Database.
+    """
     __tablename__ = 'task'
 
     _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -16,6 +20,12 @@ class Task(db.Model):
     status = db.Column(db.Boolean)
 
     def __init__(self, description, status):
+        """
+        Method to init and create an instance of a Task.
+        
+        :param description: (String) Description of a Task.
+        :param status: (Boolean) Status of a Task.
+        """
         self.description = description
         self.status = status
 
@@ -23,11 +33,24 @@ class Task(db.Model):
 @app.route('/')
 @app.route('/index', methods=['GET'])
 def index():
+    """
+    Returns the initial HTML page of application.
+
+    :return: Render the initial page. The index.html file.
+    """
     return render_template('index.html')
 
 
 @app.route('/insert', methods=['GET', 'POST'])
 def insert():
+    """
+    Method that creates a new Task in the database, or update it if the
+     Description already exists and returns or redirect the HTML page.
+
+    :return: If a POST HTTP request called it, returns the
+     page with all registers. If not, renders the page of insert a new
+      Task.
+    """
     if request.method == 'POST':
         description = request.form.get('description')
         status = request.form.get('status')
@@ -52,12 +75,26 @@ def insert():
 
 @app.route('/find-all', methods=['GET'])
 def find_all():
+    """
+    Method that query all the registers in the database and returns all
+     the data.
+
+    :return: Renders the page with the list of all Tasks stored in
+     the database.
+    """
     tasks = Task.query.all()
     return render_template('list.html', tasks=tasks)
 
 
 @app.route('/delete-by-id/<int:task_id>', methods=['GET', 'DELETE'])
 def delete_by_id(task_id):
+    """
+    Method that deletes a register of Task by identifier.
+
+    :param task_id: (Integer) Identifier of the Task.
+    :return: After deletion in database, renders the HTML page with the
+     list of all Tasks.
+    """
     task = find_by_id(task_id)
     db.session.delete(task)
     db.session.commit()
@@ -66,6 +103,13 @@ def delete_by_id(task_id):
 
 @app.route('/change-status-by-id/<int:task_id>', methods=['GET', 'PUT'])
 def change_status_by_id(task_id):
+    """
+    Method that change the status of a Task by Identifier.
+
+    :param task_id: (Integer) Identifier of the Task.
+    :return: After update in database, renders the HTML page with the
+     list of all Tasks.
+    """
     task = find_by_id(task_id)
     if task.status:
         task.status = False
@@ -78,6 +122,15 @@ def change_status_by_id(task_id):
 
 @app.route('/update-by-id/<int:task_id>', methods=['GET', 'POST', 'PUT'])
 def update_by_id(task_id):
+    """
+    Method that updates a Task in the database by Identifier.
+
+    :param task_id: (Integer) Identifier of the Task.
+    :return: If a POST or PUT HTTP method request called the method,
+     and the process is executed with success, renders the HTML page
+     with the list of all Tasks. If not, returns the HTML page with
+     the form to update, with validation messages or not.
+    """
     task = find_by_id(task_id)
     description = request.form.get('description')
 
@@ -97,11 +150,23 @@ def update_by_id(task_id):
 
 
 def find_by_id(task_id):
+    """
+    Method that query a Task in the Database by Identifier.
+
+    :param task_id: (Integer) Identifier of the Task.
+    :return: Returns a Task.
+    """
     db.session.remove()
     return Task.query.filter_by(_id=task_id).first()
 
 
 def find_by_description(description):
+    """
+    Method that query a Task in the Database by Description.
+
+    :param description: (String) Description of the Task.
+    :return: Returns a Task.
+    """
     return Task.query.filter_by(description=description).first()
 
 

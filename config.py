@@ -3,6 +3,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
+    """
+    Class to put on the default configurations of the application.
+    """
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
@@ -13,18 +16,22 @@ class Config(object):
 
 
 class ProductionConfig(Config):
+    """
+    Class to put on the Production configurations of the application.
+    """
     DEBUG = False
 
 
-class StagingConfig(Config):
-    DEVELOPMENT = True
-    DEBUG = True
-
-
 class DevelopmentConfig(Config):
+    """
+    Class to put on the Development configurations of the application.
+    """
     DEVELOPMENT = True
     DEBUG = True
 
 
 class TestingConfig(Config):
+    """
+    Class to put on the Testing configurations of the application.
+    """
     TESTING = True
